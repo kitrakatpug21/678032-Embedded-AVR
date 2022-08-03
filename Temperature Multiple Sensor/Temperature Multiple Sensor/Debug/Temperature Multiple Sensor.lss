@@ -1,0 +1,283 @@
+
+Temperature Multiple Sensor.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000014c  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000001a0  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000001a0  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001d0  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000030  00000000  00000000  0000020c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   0000070b  00000000  00000000  0000023c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000634  00000000  00000000  00000947  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   0000030a  00000000  00000000  00000f7b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000044  00000000  00000000  00001288  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000375  00000000  00000000  000012cc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    0000013f  00000000  00000000  00001641  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000020  00000000  00000000  00001780  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 46 00 	call	0x8c	; 0x8c <main>
+  64:	0c 94 a4 00 	jmp	0x148	; 0x148 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <ADC_Init>:
+#define F_CPU 8000000UL
+#include <util/delay.h>
+
+void ADC_Init(uint8_t channel)
+{
+	ADMUX = 0b01000000;
+  6c:	90 e4       	ldi	r25, 0x40	; 64
+  6e:	97 b9       	out	0x07, r25	; 7
+	ADCSRA = 0b10000110;// basic setup
+  70:	96 e8       	ldi	r25, 0x86	; 134
+  72:	96 b9       	out	0x06, r25	; 6
+	ADMUX = ADMUX | channel;
+  74:	97 b1       	in	r25, 0x07	; 7
+  76:	89 2b       	or	r24, r25
+  78:	87 b9       	out	0x07, r24	; 7
+  7a:	08 95       	ret
+
+0000007c <ADC_Result>:
+}
+// uint16_t ADC_Result()
+uint16_t ADC_Result()
+{
+	ADCSRA = ADCSRA | (0b01000000);// ADD Start bit on existing ADCSRA Value
+  7c:	86 b1       	in	r24, 0x06	; 6
+  7e:	80 64       	ori	r24, 0x40	; 64
+  80:	86 b9       	out	0x06, r24	; 6
+	while ((ADCSRA & (1<<4))==0)
+  82:	34 9b       	sbis	0x06, 4	; 6
+  84:	fe cf       	rjmp	.-4      	; 0x82 <ADC_Result+0x6>
+	{
+		//wait till conversion completes
+	}
+	//PORTC = ADCL;//comment
+	//PORTD = ADCH;//comment
+	return ADC;
+  86:	84 b1       	in	r24, 0x04	; 4
+  88:	95 b1       	in	r25, 0x05	; 5
+}
+  8a:	08 95       	ret
+
+0000008c <main>:
+
+int main(void)
+{
+	DDRC = 0b00000111;// AC-1
+  8c:	87 e0       	ldi	r24, 0x07	; 7
+  8e:	84 bb       	out	0x14, r24	; 20
+	DDRD = 0b00000111;// AC-2
+  90:	81 bb       	out	0x11, r24	; 17
+	int reading;
+	while (1)
+	{
+		ADC_Init(0);
+  92:	80 e0       	ldi	r24, 0x00	; 0
+  94:	0e 94 36 00 	call	0x6c	; 0x6c <ADC_Init>
+		//ADC_Result();
+		reading = ADC_Result();
+  98:	0e 94 3e 00 	call	0x7c	; 0x7c <ADC_Result>
+		if (reading >= 62)
+  9c:	8e 33       	cpi	r24, 0x3E	; 62
+  9e:	91 05       	cpc	r25, r1
+  a0:	1c f0       	brlt	.+6      	; 0xa8 <main+0x1c>
+		{
+			//if temp > 30
+			//Fan1 + Fan2 + Compressor
+			PORTC = 0b00000111;
+  a2:	87 e0       	ldi	r24, 0x07	; 7
+  a4:	85 bb       	out	0x15, r24	; 21
+  a6:	19 c0       	rjmp	.+50     	; 0xda <main+0x4e>
+		}
+		else if (reading < 62 && reading >= 52)
+  a8:	9c 01       	movw	r18, r24
+  aa:	24 53       	subi	r18, 0x34	; 52
+  ac:	31 09       	sbc	r19, r1
+  ae:	2a 30       	cpi	r18, 0x0A	; 10
+  b0:	31 05       	cpc	r19, r1
+  b2:	18 f4       	brcc	.+6      	; 0xba <main+0x2e>
+		{
+			//if 30 > temp > 25
+			//Fan1 + compressor
+			PORTC = 0b00000101;
+  b4:	85 e0       	ldi	r24, 0x05	; 5
+  b6:	85 bb       	out	0x15, r24	; 21
+  b8:	10 c0       	rjmp	.+32     	; 0xda <main+0x4e>
+		}
+		else if (reading < 52 && reading >= 41)
+  ba:	9c 01       	movw	r18, r24
+  bc:	29 52       	subi	r18, 0x29	; 41
+  be:	31 09       	sbc	r19, r1
+  c0:	2b 30       	cpi	r18, 0x0B	; 11
+  c2:	31 05       	cpc	r19, r1
+  c4:	18 f4       	brcc	.+6      	; 0xcc <main+0x40>
+		{
+			//if 25 > temp 20
+			//Fan1 + Fan2
+			PORTC = 0b00000110;
+  c6:	86 e0       	ldi	r24, 0x06	; 6
+  c8:	85 bb       	out	0x15, r24	; 21
+  ca:	07 c0       	rjmp	.+14     	; 0xda <main+0x4e>
+		}
+		else if (reading < 41 && reading >= 31)
+  cc:	4f 97       	sbiw	r24, 0x1f	; 31
+  ce:	0a 97       	sbiw	r24, 0x0a	; 10
+  d0:	18 f4       	brcc	.+6      	; 0xd8 <main+0x4c>
+		{
+			//if 20 > temp 15
+			//Fan1
+			PORTC = 0b00000100;
+  d2:	84 e0       	ldi	r24, 0x04	; 4
+  d4:	85 bb       	out	0x15, r24	; 21
+  d6:	01 c0       	rjmp	.+2      	; 0xda <main+0x4e>
+		}
+		else
+		{
+			// everything off otherwise
+			PORTC = 0b00000000;
+  d8:	15 ba       	out	0x15, r1	; 21
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  da:	2f ef       	ldi	r18, 0xFF	; 255
+  dc:	80 e7       	ldi	r24, 0x70	; 112
+  de:	92 e0       	ldi	r25, 0x02	; 2
+  e0:	21 50       	subi	r18, 0x01	; 1
+  e2:	80 40       	sbci	r24, 0x00	; 0
+  e4:	90 40       	sbci	r25, 0x00	; 0
+  e6:	e1 f7       	brne	.-8      	; 0xe0 <main+0x54>
+  e8:	00 c0       	rjmp	.+0      	; 0xea <main+0x5e>
+  ea:	00 00       	nop
+		}
+		_delay_ms(100);
+		ADC_Init(1);
+  ec:	81 e0       	ldi	r24, 0x01	; 1
+  ee:	0e 94 36 00 	call	0x6c	; 0x6c <ADC_Init>
+		reading = ADC_Result();
+  f2:	0e 94 3e 00 	call	0x7c	; 0x7c <ADC_Result>
+		if (reading >= 62)
+  f6:	8e 33       	cpi	r24, 0x3E	; 62
+  f8:	91 05       	cpc	r25, r1
+  fa:	1c f0       	brlt	.+6      	; 0x102 <main+0x76>
+		{
+			//if temp > 30
+			//Fan1 + Fan2 + Compressor
+			PORTD = 0b00000111;
+  fc:	87 e0       	ldi	r24, 0x07	; 7
+  fe:	82 bb       	out	0x12, r24	; 18
+ 100:	19 c0       	rjmp	.+50     	; 0x134 <main+0xa8>
+		}
+		else if (reading < 62 && reading >= 52)
+ 102:	9c 01       	movw	r18, r24
+ 104:	24 53       	subi	r18, 0x34	; 52
+ 106:	31 09       	sbc	r19, r1
+ 108:	2a 30       	cpi	r18, 0x0A	; 10
+ 10a:	31 05       	cpc	r19, r1
+ 10c:	18 f4       	brcc	.+6      	; 0x114 <main+0x88>
+		{
+			//if 30 > temp > 25
+			//Fan1 + compressor
+			PORTD = 0b00000101;
+ 10e:	85 e0       	ldi	r24, 0x05	; 5
+ 110:	82 bb       	out	0x12, r24	; 18
+ 112:	10 c0       	rjmp	.+32     	; 0x134 <main+0xa8>
+		}
+		else if (reading < 52 && reading >= 41)
+ 114:	9c 01       	movw	r18, r24
+ 116:	29 52       	subi	r18, 0x29	; 41
+ 118:	31 09       	sbc	r19, r1
+ 11a:	2b 30       	cpi	r18, 0x0B	; 11
+ 11c:	31 05       	cpc	r19, r1
+ 11e:	18 f4       	brcc	.+6      	; 0x126 <main+0x9a>
+		{
+			//if 25 > temp 20
+			//Fan1 + Fan2
+			PORTD = 0b00000110;
+ 120:	86 e0       	ldi	r24, 0x06	; 6
+ 122:	82 bb       	out	0x12, r24	; 18
+ 124:	07 c0       	rjmp	.+14     	; 0x134 <main+0xa8>
+		}
+		else if (reading < 41 && reading >= 31)
+ 126:	4f 97       	sbiw	r24, 0x1f	; 31
+ 128:	0a 97       	sbiw	r24, 0x0a	; 10
+ 12a:	18 f4       	brcc	.+6      	; 0x132 <main+0xa6>
+		{
+			//if 20 > temp 15
+			//Fan1
+			PORTD = 0b00000100;
+ 12c:	84 e0       	ldi	r24, 0x04	; 4
+ 12e:	82 bb       	out	0x12, r24	; 18
+ 130:	01 c0       	rjmp	.+2      	; 0x134 <main+0xa8>
+		}
+		else
+		{
+			// everything off otherwise
+			PORTD = 0b00000000;
+ 132:	12 ba       	out	0x12, r1	; 18
+ 134:	2f ef       	ldi	r18, 0xFF	; 255
+ 136:	80 e7       	ldi	r24, 0x70	; 112
+ 138:	92 e0       	ldi	r25, 0x02	; 2
+ 13a:	21 50       	subi	r18, 0x01	; 1
+ 13c:	80 40       	sbci	r24, 0x00	; 0
+ 13e:	90 40       	sbci	r25, 0x00	; 0
+ 140:	e1 f7       	brne	.-8      	; 0x13a <main+0xae>
+ 142:	00 c0       	rjmp	.+0      	; 0x144 <main+0xb8>
+ 144:	00 00       	nop
+ 146:	a5 cf       	rjmp	.-182    	; 0x92 <main+0x6>
+
+00000148 <_exit>:
+ 148:	f8 94       	cli
+
+0000014a <__stop_program>:
+ 14a:	ff cf       	rjmp	.-2      	; 0x14a <__stop_program>
