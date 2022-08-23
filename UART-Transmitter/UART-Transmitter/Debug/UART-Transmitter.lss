@@ -1,0 +1,178 @@
+
+UART-Transmitter.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000f4  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000008  00800060  000000f4  00000168  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000170  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001a0  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000020  00000000  00000000  000001dc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   0000067e  00000000  00000000  000001fc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000005d5  00000000  00000000  0000087a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   0000027a  00000000  00000000  00000e4f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000034  00000000  00000000  000010cc  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000341  00000000  00000000  00001100  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000000b3  00000000  00000000  00001441  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000010  00000000  00000000  000014f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   8:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  10:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  14:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  18:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  1c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  20:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  24:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  28:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  2c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  30:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  34:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  38:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  3c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  40:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  44:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  48:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  4c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  50:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	e4 ef       	ldi	r30, 0xF4	; 244
+  68:	f0 e0       	ldi	r31, 0x00	; 0
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+  70:	a8 36       	cpi	r26, 0x68	; 104
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
+  76:	0e 94 41 00 	call	0x82	; 0x82 <main>
+  7a:	0c 94 78 00 	jmp	0xf0	; 0xf0 <_exit>
+
+0000007e <__bad_interrupt>:
+  7e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000082 <main>:
+#include <avr/io.h>
+#define F_CPU 8000000UL
+#include <util/delay.h>
+
+int main(void)
+{
+  82:	cf 93       	push	r28
+  84:	df 93       	push	r29
+  86:	cd b7       	in	r28, 0x3d	; 61
+  88:	de b7       	in	r29, 0x3e	; 62
+  8a:	28 97       	sbiw	r28, 0x08	; 8
+  8c:	0f b6       	in	r0, 0x3f	; 63
+  8e:	f8 94       	cli
+  90:	de bf       	out	0x3e, r29	; 62
+  92:	0f be       	out	0x3f, r0	; 63
+  94:	cd bf       	out	0x3d, r28	; 61
+    // Baud Rate (at 9600 for 8MHz Clock) Setup in UBRR
+	DDRD = 0b00000010;
+  96:	82 e0       	ldi	r24, 0x02	; 2
+  98:	81 bb       	out	0x11, r24	; 17
+	UBRRH = 0;
+  9a:	10 bc       	out	0x20, r1	; 32
+	UBRRL = 51;
+  9c:	83 e3       	ldi	r24, 0x33	; 51
+  9e:	89 b9       	out	0x09, r24	; 9
+	UCSRB = 0b00001000; // TXEN 
+  a0:	88 e0       	ldi	r24, 0x08	; 8
+  a2:	8a b9       	out	0x0a, r24	; 10
+	UCSRC = 0b10100110; // URSEL Asynch Par-Ev St-1 Data-8
+  a4:	86 ea       	ldi	r24, 0xA6	; 166
+  a6:	80 bd       	out	0x20, r24	; 32
+	char array[8] = "Gopal\r\n";
+  a8:	88 e0       	ldi	r24, 0x08	; 8
+  aa:	e0 e6       	ldi	r30, 0x60	; 96
+  ac:	f0 e0       	ldi	r31, 0x00	; 0
+  ae:	de 01       	movw	r26, r28
+  b0:	11 96       	adiw	r26, 0x01	; 1
+  b2:	01 90       	ld	r0, Z+
+  b4:	0d 92       	st	X+, r0
+  b6:	8a 95       	dec	r24
+  b8:	e1 f7       	brne	.-8      	; 0xb2 <main+0x30>
+	while (1) 
+    {
+		for (int i=0; i<8; i=i+1)
+  ba:	80 e0       	ldi	r24, 0x00	; 0
+  bc:	90 e0       	ldi	r25, 0x00	; 0
+  be:	14 c0       	rjmp	.+40     	; 0xe8 <main+0x66>
+		{
+			while ((UCSRA & 0b00100000)==0)
+  c0:	5d 9b       	sbis	0x0b, 5	; 11
+  c2:	fe cf       	rjmp	.-4      	; 0xc0 <main+0x3e>
+			{
+				// we wait till the Transmission Buffer is not empty
+			}
+			// once it is empty, Load a new Data in it
+			UDR = array[i];
+  c4:	e1 e0       	ldi	r30, 0x01	; 1
+  c6:	f0 e0       	ldi	r31, 0x00	; 0
+  c8:	ec 0f       	add	r30, r28
+  ca:	fd 1f       	adc	r31, r29
+  cc:	e8 0f       	add	r30, r24
+  ce:	f9 1f       	adc	r31, r25
+  d0:	20 81       	ld	r18, Z
+  d2:	2c b9       	out	0x0c, r18	; 12
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  d4:	2f ef       	ldi	r18, 0xFF	; 255
+  d6:	30 e7       	ldi	r19, 0x70	; 112
+  d8:	42 e0       	ldi	r20, 0x02	; 2
+  da:	21 50       	subi	r18, 0x01	; 1
+  dc:	30 40       	sbci	r19, 0x00	; 0
+  de:	40 40       	sbci	r20, 0x00	; 0
+  e0:	e1 f7       	brne	.-8      	; 0xda <main+0x58>
+  e2:	00 c0       	rjmp	.+0      	; 0xe4 <main+0x62>
+  e4:	00 00       	nop
+	UCSRB = 0b00001000; // TXEN 
+	UCSRC = 0b10100110; // URSEL Asynch Par-Ev St-1 Data-8
+	char array[8] = "Gopal\r\n";
+	while (1) 
+    {
+		for (int i=0; i<8; i=i+1)
+  e6:	01 96       	adiw	r24, 0x01	; 1
+  e8:	88 30       	cpi	r24, 0x08	; 8
+  ea:	91 05       	cpc	r25, r1
+  ec:	4c f3       	brlt	.-46     	; 0xc0 <main+0x3e>
+  ee:	e5 cf       	rjmp	.-54     	; 0xba <main+0x38>
+
+000000f0 <_exit>:
+  f0:	f8 94       	cli
+
+000000f2 <__stop_program>:
+  f2:	ff cf       	rjmp	.-2      	; 0xf2 <__stop_program>
